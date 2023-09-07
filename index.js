@@ -90,10 +90,11 @@ async function findUpdates(){
                 console.log(newOwners);
 */
                 console.log(propertyData.Persons);
+                item.owners = propertyData.Persons;
             }
         }
-
     }
+    fs.writeFile('output.json', JSON.stringify(records), ()=>{ console.log('Saved.'); });
 }
 
 //populate();
