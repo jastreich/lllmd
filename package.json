@@ -1,0 +1,13 @@
+{
+  "name": "lllmd",
+  "version": "1.0.0",
+  "description": "Lauderdale Lakes Land Management District New People",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jeremy Streich",
+  "license": "CC0-1.0",
+  "dependencies": {
+  }
+}
