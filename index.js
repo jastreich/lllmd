@@ -67,34 +67,48 @@ async function loadRecords(){
 
 async function findUpdates(){
     await loadRecords();
+    const date = new Date().toISOString();
+    let content = '';
+
     for(let index = 0;index < records.length;++index){
+
         let item = records[index];
         const propertyData = await getPropertyData(item.id);
+
         if('Message' in propertyData){
             errorIds.push(item.id);
         } else {
+
             let oldOwners = pluck(item.owners,'PersonId');
-            //console.log(propertyData);
             let newOwners = pluck(propertyData.Persons,'PersonId');
             const result = oldOwners.every(value => newOwners.includes(value));
+
             if(!result){
                 console.error(item.id);
                 if(propertyData.SiteAddresses.length){
-                    console.log(propertyData.SiteAddresses[0].Format);
+                    console.log(item.id + '\t' + propertyData.SiteAddresses[0].Format);
+                    content += item.id + '\t' + propertyData.SiteAddresses[0].Format + '\t';
                 }
-                console.log('New Owners');
-/*
-                console.log(' - old - ');
-                console.log(oldOwners);
-                console.log(' - new - ');
-                console.log(newOwners);
-*/
-                console.log(propertyData.Persons);
+                else {
+                    content += '\t';
+                }
+
+                for(let personIndex = 0;personIndex < propertyData.Persons.length;++personIndex){
+                    content += propertyData.Persons[personIndex].Person.FirstName + '\t';
+                    content += propertyData.Persons[personIndex].Person.LastName + '\t';
+                }
+
+                content += '\n';
                 item.owners = propertyData.Persons;
             }
         }
     }
-    fs.writeFile('output.json', JSON.stringify(records), ()=>{ console.log('Saved.'); });
+
+    console.log('\n');
+    console.error(content);
+
+    fs.writeFile('output.json', JSON.stringify(records), ()=>{ console.log('JSON Updated.'); });
+    fs.writeFile('new.tsv', content,()=>{console.log('TSV saved.')});
 }
 
 //populate();

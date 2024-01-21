@@ -1,3 +1,6 @@
 request.txt
 node_modules
 .env
+new.tsv
+output.json
+output*.json
